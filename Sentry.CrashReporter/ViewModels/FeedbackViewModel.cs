@@ -1,5 +1,7 @@
 using Sentry.CrashReporter.Services;
-
+using System.Reactive.Linq;
+using System.Text.Json.Nodes;
+using Sentry.CrashReporter.Extensions;
 namespace Sentry.CrashReporter.ViewModels;
 
 public partial class FeedbackViewModel : ReactiveObject
@@ -22,6 +24,28 @@ public partial class FeedbackViewModel : ReactiveObject
             Email = reporter.Feedback.Email;
             Message = reporter.Feedback.Message;
         }
+
+        // NEW: when an Envelope arrives, read user.username + user.email once
+        this.WhenAnyValue(x => x.Envelope)
+            .Where(e => e is not null)
+            .Take(1) // only need to initialize once
+            .Subscribe(env =>
+            {
+                var evt = env!.TryGetEvent();
+                var payload = evt?.TryParseAsJson();
+                var user = payload?.TryGetProperty("user")?.AsObject();
+
+                if (user is null)
+                    return;
+
+                // Only overwrite if not already set (e.g. from reporter.Feedback)
+                if (string.IsNullOrWhiteSpace(Name))
+                    Name = user.TryGetString("username")
+                           ?? user.TryGetString("id");
+
+                if (string.IsNullOrWhiteSpace(Email))
+                    Email = user.TryGetString("email");
+            });
 
         _dsnHelper = this.WhenAnyValue(x => x.Envelope, e => e?.TryGetDsn())
             .ToProperty(this, x => x.Dsn);

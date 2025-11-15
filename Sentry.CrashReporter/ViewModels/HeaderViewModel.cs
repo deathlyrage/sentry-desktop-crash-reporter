@@ -21,6 +21,10 @@ public partial class HeaderViewModel : ReactiveObject
     [ObservableAsProperty] private string? _environment = string.Empty;
     [ObservableAsProperty] private EnvelopeException? _exception;
 
+    [ObservableAsProperty] private JsonObject? _user;
+    [ObservableAsProperty] private string? _userName = string.Empty;
+    [ObservableAsProperty] private string? _userEmail = string.Empty;
+
     public HeaderViewModel()
     {
         _eventHelper = this.WhenAnyValue(x => x.Envelope, e => e?.TryGetEvent())
@@ -63,5 +67,17 @@ public partial class HeaderViewModel : ReactiveObject
 
         _exceptionHelper = this.WhenAnyValue(x => x.Envelope, e => e?.TryGetException())
             .ToProperty(this, x => x.Exception);
+
+        _userHelper = this.WhenAnyValue(x => x.Payload,
+                                        p => p?.TryGetProperty("user")?.AsObject())
+            .ToProperty(this, x => x.User);
+
+        _userNameHelper = this.WhenAnyValue(x => x.User,
+                                            u => u?.TryGetString("username"))
+            .ToProperty(this, x => x.UserName);
+
+        _userEmailHelper = this.WhenAnyValue(x => x.User,
+                                             u => u?.TryGetString("email"))
+            .ToProperty(this, x => x.UserEmail);
     }
 }
