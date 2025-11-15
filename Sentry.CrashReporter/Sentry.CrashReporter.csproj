@@ -65,7 +65,7 @@
         <UnoSupportedLanguage Include="en-US" />
 
         <!-- Required for the main assembly when trimming is enabled -->
-        <TrimmerRootAssembly Include="Sentry.CrashReporter" />
+        <TrimmerRootAssembly Include="CrashReporter" />
     </ItemGroup>
 
 
