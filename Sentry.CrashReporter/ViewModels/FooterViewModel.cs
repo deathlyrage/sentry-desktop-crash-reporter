@@ -117,9 +117,15 @@ public partial class FooterViewModel : ReactiveObject
 
         var subject = $"Help with Crash {EventId}";
 
-        // Use <br> for line breaks (HTML), NOT \n
+        // Convert the user's line breaks to <br> before encoding
+        var userMessage = fb?.Message ?? string.Empty;
+        var userMessageHtml = userMessage
+            .Replace("\r\n", "<br>")
+            .Replace("\n", "<br>")
+            .Replace("\r", "<br>");
+
         var description =
-            $"{fb?.Message}<br><br>" +
+            $"{userMessageHtml}<br><br>" +
             $"Event ID: {EventId}<br>" +
             $"DSN: {Dsn}<br>";
 
@@ -135,7 +141,6 @@ public partial class FooterViewModel : ReactiveObject
 
         await Windows.System.Launcher.LaunchUriAsync(new Uri(url));
     }
-
 
     [ReactiveCommand]
     private void Cancel() => _window.Close();
