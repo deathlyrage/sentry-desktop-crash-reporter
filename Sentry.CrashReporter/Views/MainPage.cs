@@ -32,69 +32,69 @@ public sealed class MainPage : Page
     internal static readonly ViewItem[] Views =
     [
         new(
-            Title: "Feedback (optional)",
+            Title: "Crash Feedback (optional)",
             Icon: FA.CommentDots,
-            ToolTip: "Feedback",
+            ToolTip: "Crash Feedback",
             Region: "feedback",
             Visibility: (_, x) => x.Binding(() => Visibility.Visible),
             Builder: vm => new FeedbackView().Envelope(x => x.Binding(() => vm.Envelope))
-        ),
-        new(
-            Title: "Tags",
-            Icon: FA.Tags,
-            ToolTip: "Tags",
-            Region: "tags",
-            Visibility: (vm, x) => x.Binding(() => vm.Tags).Converter(ToVisibility),
-            Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Tags))
-        ),
-        new(
-            Title: "Contexts",
-            Icon: FA.Hashtag,
-            ToolTip: "Contexts",
-            Region: "contexts",
-            Visibility: (vm, x) => x.Binding(() => vm.Contexts).Converter(ToVisibility),
-            Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Contexts))
-        ),
-        new(
-            Title: "Additional Data",
-            Icon: FA.Table,
-            ToolTip: "Additional Data",
-            Region: "extra",
-            Visibility: (vm, x) => x.Binding(() => vm.Extra).Converter(ToVisibility),
-            Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Extra))
-        ),
-        new(
-            Title: "SDK",
-            Icon: FA.Cubes,
-            ToolTip: "SDK",
-            Region: "sdk",
-            Visibility: (vm, x) => x.Binding(() => vm.Sdk).Converter(ToVisibility),
-            Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Sdk))
-        ),
-        new(
-            Title: "User",
-            Icon: FA.User,
-            ToolTip: "User",
-            Region: "user",
-            Visibility: (vm, x) => x.Binding(() => vm.User).Converter(ToVisibility),
-            Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.User))
-        ),
-        new(
-            Title: "Attachments",
-            Icon: FA.Paperclip,
-            ToolTip: "Attachments",
-            Region: "attachments",
-            Visibility: (vm, x) => x.Binding(() => vm.Attachments).Converter(ToVisibility),
-            Builder: vm => new AttachmentView().Envelope(x => x.Binding(() => vm.Envelope))
-        ),
-        new(
-            Title: "Envelope",
-            Icon: FA.Code,
-            ToolTip: "Envelope",
-            Region: "envelope",
-            Visibility: (_, x) => x.Binding(() => Visibility.Visible),
-            Builder: vm => new EnvelopeView().Envelope(x => x.Binding(() => vm.Envelope))
-        )
+        )//,
+        //new(
+        //    Title: "Tags",
+        //    Icon: FA.Tags,
+        //    ToolTip: "Tags",
+        //    Region: "tags",
+        //    Visibility: (vm, x) => x.Binding(() => vm.Tags).Converter(ToVisibility),
+        //    Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Tags))
+        //),
+        //new(
+        //    Title: "Contexts",
+        //    Icon: FA.Hashtag,
+        //    ToolTip: "Contexts",
+        //    Region: "contexts",
+        //    Visibility: (vm, x) => x.Binding(() => vm.Contexts).Converter(ToVisibility),
+        //    Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Contexts))
+        //),
+        //new(
+        //    Title: "Additional Data",
+        //    Icon: FA.Table,
+        //    ToolTip: "Additional Data",
+        //    Region: "extra",
+        //    Visibility: (vm, x) => x.Binding(() => vm.Extra).Converter(ToVisibility),
+        //    Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Extra))
+        //),
+        //new(
+        //    Title: "SDK",
+        //    Icon: FA.Cubes,
+        //    ToolTip: "SDK",
+        //    Region: "sdk",
+        //    Visibility: (vm, x) => x.Binding(() => vm.Sdk).Converter(ToVisibility),
+        //    Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.Sdk))
+        //),
+        //new(
+        //    Title: "User",
+        //    Icon: FA.User,
+        //    ToolTip: "User",
+        //    Region: "user",
+        //    Visibility: (vm, x) => x.Binding(() => vm.User).Converter(ToVisibility),
+        //    Builder: vm => new JsonGrid().Data(x => x.Binding(() => vm.User))
+        //),
+        //new(
+        //    Title: "Attachments",
+        //    Icon: FA.Paperclip,
+        //    ToolTip: "Attachments",
+        //    Region: "attachments",
+        //    Visibility: (vm, x) => x.Binding(() => vm.Attachments).Converter(ToVisibility),
+        //    Builder: vm => new AttachmentView().Envelope(x => x.Binding(() => vm.Envelope))
+        //),
+        //new(
+        //    Title: "Envelope",
+        //    Icon: FA.Code,
+        //    ToolTip: "Envelope",
+        //    Region: "envelope",
+        //    Visibility: (_, x) => x.Binding(() => Visibility.Visible),
+        //    Builder: vm => new EnvelopeView().Envelope(x => x.Binding(() => vm.Envelope))
+        //)
     ];
 
     public MainPage()

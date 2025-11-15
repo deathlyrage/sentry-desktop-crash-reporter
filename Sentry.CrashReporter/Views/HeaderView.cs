@@ -38,8 +38,38 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                         .Spacing(8)
                         .Children(
                             new TextBlock()
-                                .Text("Report a Bug")
+                                .Text("Report a Crash")
                                 .Style(ThemeResource.Get<Style>("TitleTextBlockStyle")),
+
+                            // NEW: help text
+                            new TextBlock()
+                                .Text("We’re constantly fixing crashes to keep the game running smoothly.")
+                                .TextWrapping(TextWrapping.Wrap),
+
+                            new TextBlock()
+                                .Text("If this one is urgent, please open a support ticket after sending in this crash.")
+                                .TextWrapping(TextWrapping.Wrap),
+
+                            // Support website button
+                            new HyperlinkButton
+                            {
+                                Content = "Open Support Site",
+                                NavigateUri = new Uri("https://support.alderongames.com/hc/en-us/requests/new?ticket_form_id=900001271243")
+                            }
+                            .Margin(0, 0, 0, 4),
+
+                           new TextBlock()
+                                .Text("If not, a bug report really helps us out.")
+                                .TextWrapping(TextWrapping.Wrap),
+
+                            // Bug tracker button
+                            new HyperlinkButton
+                            {
+                                Content = "Open Bug Tracker",
+                                NavigateUri = new Uri("https://bugtracker.alderongames.com/bug/create")
+                            }
+                            .Margin(0, 0, 0, 8),
+
                             new WrapPanel()
                                 .Margin(-4, 0)
                                 .Orientation(Orientation.Horizontal)
