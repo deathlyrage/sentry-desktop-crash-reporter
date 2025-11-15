@@ -65,9 +65,9 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host ""
 Write-Host "=== Creating macOS Universal Binary ==="
 
-$lipoOutput = Join-Path $outUniversal "CrashReportClient"
-$lipoArm    = Join-Path $outDirArm  "CrashReportClient"
-$lipoX64    = Join-Path $outDirX64 "CrashReportClient"
+$lipoOutput = Join-Path $outUniversal "CrashReporter"
+$lipoArm    = Join-Path $outDirArm  "CrashReporter"
+$lipoX64    = Join-Path $outDirX64 "CrashReporter"
 
 if (!(Test-Path $lipo)) {
     Write-Error "lipo tool not found: $lipo"
