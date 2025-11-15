@@ -28,25 +28,41 @@ public sealed class FooterView : ReactiveUserControl<FooterViewModel>
         this.Content(new Grid()
             .DataContext(ViewModel, (view, vm) => view
                 .ColumnSpacing(8)
-                .ColumnDefinitions("*,Auto,Auto")
+                .ColumnDefinitions("Auto,*,Auto,Auto")
                 .Children(
+
+                    // Column 0: Crash Id / status
                     new ContentControl()
                         .Grid(0)
-                        .Content(x => x.Binding(() => vm.Status).Convert(status => BuildStatusLabel(vm, status).Name("statusLabel"))),
-                    new Button()
+                        .Content(x => x.Binding(() => vm.Status)
+                            .Convert(status => BuildStatusLabel(vm, status).Name("statusLabel"))),
+
+                    // Column 1: checkbox, centered in the middle area
+                    new CheckBox()
                         .Grid(1)
+                        .Content("I need help, create a support ticket.")
+                        .VerticalAlignment(VerticalAlignment.Center)
+                        .HorizontalAlignment(HorizontalAlignment.Center)
+                        .IsChecked(x => x.Binding(() => vm.CreateZendeskTicket).TwoWay()),
+
+                    // Column 2: Cancel button
+                    new Button()
+                        .Grid(2)
                         .Content("Cancel")
                         .Name("cancelButton")
                         .Command(x => x.Binding(() => vm.CancelCommand))
                         .Background(Colors.Transparent),
-                    new Button()
-                        .Grid(2)
-                        .Content("Submit")
-                        .Name("submitButton")
-                        .AutomationProperties(automationId: "submitButton")
-                        .Command(x => x.Binding(() => vm.SubmitCommand))
-                        .Style(StaticResource.Get<Style>("AccentButtonStyle"))
-                        .CornerRadius(ThemeResource.Get<CornerRadius>("ControlCornerRadius")))));
+
+                // Column 3: Submit button
+                new Button()
+                    .Grid(3)
+                    .Content("Submit")
+                    .Name("submitButton")
+                    .AutomationProperties(automationId: "submitButton")
+                    .Command(x => x.Binding(() => vm.SubmitCommand))
+                    .Style(StaticResource.Get<Style>("AccentButtonStyle"))
+                    .CornerRadius(ThemeResource.Get<CornerRadius>("ControlCornerRadius"))))
+            );
     }
 
     FrameworkElement BuildStatusLabel(FooterViewModel vm, FooterStatus status)
@@ -55,7 +71,11 @@ public sealed class FooterView : ReactiveUserControl<FooterViewModel>
         {
             FooterStatus.Normal => new IconLabel(FA.Copy)
                 .ToolTip("Event ID")
-                .Text(x => x.Binding(() => vm.EventId)),
+                .Text(x => x.Binding(() => vm.EventId)
+                    .Convert(id => string.IsNullOrWhiteSpace(id)
+                        ? string.Empty
+                        : $"Crash Id: {id}")),
+
             FooterStatus.Busy => new IconLabel()
                 .Icon(new ProgressRing()
                     .IsActive(true)
@@ -63,6 +83,7 @@ public sealed class FooterView : ReactiveUserControl<FooterViewModel>
                     .Height(20))
                 .IsTextSelectionEnabled(false)
                 .Text("Please wait. Submitting the report..."),
+
             FooterStatus.Error => new IconLabel(FA.CircleExclamation)
                 .TextWrapping(TextWrapping.Wrap)
                 .VerticalAlignment(VerticalAlignment.Center)
