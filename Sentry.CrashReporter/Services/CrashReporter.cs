@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace Sentry.CrashReporter.Services;
 
-public record Feedback(string? Name, string? Email, string Message);
+public record Feedback(string? Name, string? Email, string? UserId, string Message);
 
 public interface ICrashReporter
 {
@@ -75,13 +75,15 @@ public class CrashReporter(IStorageFile? file = null, ISentryClient? client = nu
         var message = Environment.GetEnvironmentVariable("SENTRY_FEEDBACK_MESSAGE");
         var email = Environment.GetEnvironmentVariable("SENTRY_FEEDBACK_EMAIL");
         var name = Environment.GetEnvironmentVariable("SENTRY_FEEDBACK_NAME");
+        var id = Environment.GetEnvironmentVariable("SENTRY_FEEDBACK_ID");
         if (string.IsNullOrWhiteSpace(message) &&
             string.IsNullOrWhiteSpace(email) &&
-            string.IsNullOrWhiteSpace(name))
+            string.IsNullOrWhiteSpace(name) &&
+            string.IsNullOrWhiteSpace(id))
         {
             return null;
         }
 
-        return new Feedback(name, email, message ?? string.Empty);
+        return new Feedback(name, email, id, message ?? string.Empty);
     }
 }

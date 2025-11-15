@@ -80,6 +80,11 @@ public partial class FooterViewModel : ReactiveObject
             ErrorMessage = e.Message;
         }
     }
+    string NormalizeNewlines(string s)
+    {
+        // Convert all newline types to CRLF, which Zendesk accepts
+        return s.Replace("\r\n", "\n").Replace("\n", "\r\n");
+    }
 
     private async Task LaunchZendeskTicketAsync()
     {
@@ -103,16 +108,14 @@ public partial class FooterViewModel : ReactiveObject
                                           "pot_os_windows";    // fallback
 
         // Subject line
-        var subject = $"Crash report {ShortEventId ?? EventId}";
+        var subject = $"Help with Crash {EventId}";
 
         // Description includes crash metadata + user message
         var description =
             $"{fb?.Message}\n\n" +
-            $"Event ID: {EventId}\n" +
-            $"DSN: {Dsn}\n" +
-            $"Platform: {platformValue}\n" +
-            $"Username: {fb?.Name}\n" +
-            $"Email: {fb?.Email}";
+            $"Crash ID: {EventId}\n";
+
+        description = NormalizeNewlines(description);
 
         // Build the final Zendesk URL
         var url =
@@ -123,7 +126,7 @@ public partial class FooterViewModel : ReactiveObject
             $"&tf_description={Enc(description)}" +
             $"&tf_{PlatformFieldId}={Enc(platformValue)}" +
             $"&tf_{UsernameFieldId}={Enc(fb?.Name)}" +
-            $"&tf_{AlderonIdFieldId}="; // fill if you have it
+            $"&tf_{AlderonIdFieldId}={Enc(fb?.UserId)}";
 
         await Windows.System.Launcher.LaunchUriAsync(new Uri(url));
     }

@@ -14,6 +14,7 @@ public partial class FeedbackViewModel : ReactiveObject
     [Reactive] private string _message = string.Empty;
     [Reactive] private string? _email;
     [Reactive] private string? _name;
+    [Reactive] private string? _userId;
 
     public FeedbackViewModel(ICrashReporter? reporter = null)
     {
@@ -23,6 +24,7 @@ public partial class FeedbackViewModel : ReactiveObject
             Name = reporter.Feedback.Name;
             Email = reporter.Feedback.Email;
             Message = reporter.Feedback.Message;
+            UserId = reporter.Feedback.UserId;
         }
 
         // NEW: when an Envelope arrives, read user.username + user.email once
@@ -40,8 +42,10 @@ public partial class FeedbackViewModel : ReactiveObject
 
                 // Only overwrite if not already set (e.g. from reporter.Feedback)
                 if (string.IsNullOrWhiteSpace(Name))
-                    Name = user.TryGetString("username")
-                           ?? user.TryGetString("id");
+                    Name = user.TryGetString("username");
+
+                if (string.IsNullOrWhiteSpace(UserId))
+                    UserId = user.TryGetString("id");
 
                 if (string.IsNullOrWhiteSpace(Email))
                     Email = user.TryGetString("email");
@@ -59,7 +63,7 @@ public partial class FeedbackViewModel : ReactiveObject
         _isEnabledHelper = this.WhenAnyValue(x => x.IsAvailable, y => y.Message, (a, m) => a && !string.IsNullOrWhiteSpace(m))
             .ToProperty(this, x => x.IsEnabled);
 
-        this.WhenAnyValue(x => x.Name, x => x.Email, x => x.Message)
-            .Subscribe(_ => reporter.UpdateFeedback(new Feedback(Name, Email, Message)));
+        this.WhenAnyValue(x => x.Name, x => x.Email, x => x.UserId, x => x.Message)
+            .Subscribe(_ => reporter.UpdateFeedback(new Feedback(Name, Email, UserId, Message)));
     }
 }
