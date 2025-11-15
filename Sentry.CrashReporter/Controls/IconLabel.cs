@@ -33,6 +33,20 @@ public class IconLabel : StackPanel
         DependencyProperty.Register(nameof(Foreground), typeof(Brush), typeof(IconLabel),
             new PropertyMetadata(null, OnPropertyChanged));
 
+    public static readonly DependencyProperty IconOnRightProperty =
+        DependencyProperty.Register(
+            nameof(IconOnRight),
+            typeof(bool),
+            typeof(IconLabel),
+            new PropertyMetadata(false, OnPropertyChanged));
+
+    public bool IconOnRight
+    {
+        get => (bool)GetValue(IconOnRightProperty);
+        set => SetValue(IconOnRightProperty, value);
+    }
+
+
     public IconLabel(string? icon = null)
     {
         Solid = icon;
@@ -97,6 +111,7 @@ public class IconLabel : StackPanel
     {
         Children.Clear();
 
+        // Build icon
         var icon = Icon;
         if (icon is null)
         {
@@ -106,7 +121,7 @@ public class IconLabel : StackPanel
             }
             else if (Brand is { } brand)
             {
-                icon = new FontAwesomeIcon().Brand(Brand);
+                icon = new FontAwesomeIcon().Brand(brand);
             }
         }
 
@@ -114,10 +129,12 @@ public class IconLabel : StackPanel
         {
             icon.HorizontalAlignment = HorizontalAlignment.Center;
             icon.VerticalAlignment = VerticalAlignment.Center;
+
             if (icon is IconElement ie && Foreground is not null)
             {
                 ie.Foreground = Foreground;
             }
+
             icon.PointerPressed += (_, _) =>
             {
                 var dataPackage = new DataPackage();
@@ -125,12 +142,13 @@ public class IconLabel : StackPanel
                 Clipboard.SetContent(dataPackage);
                 _ = Toast.Show(this, null, "Copied to clipboard", Text ?? string.Empty);
             };
-            Children.Add(icon);
         }
 
+        // Build text
+        TextBlock? textBlock = null;
         if (Text is not null)
         {
-            var textBlock = new TextBlock()
+            textBlock = new TextBlock()
                 .Text(Text)
                 .TextWrapping(TextWrapping)
                 .VerticalAlignment(VerticalAlignment.Center)
@@ -139,7 +157,18 @@ public class IconLabel : StackPanel
             {
                 textBlock.Foreground(Foreground);
             }
-            Children.Add(textBlock);
+        }
+
+        // Add in chosen order
+        if (!IconOnRight)
+        {
+            if (icon is not null) Children.Add(icon);
+            if (textBlock is not null) Children.Add(textBlock);
+        }
+        else
+        {
+            if (textBlock is not null) Children.Add(textBlock);
+            if (icon is not null) Children.Add(icon);
         }
     }
 }

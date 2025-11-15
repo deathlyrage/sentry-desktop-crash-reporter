@@ -28,16 +28,22 @@ public sealed class FooterView : ReactiveUserControl<FooterViewModel>
         this.Content(new Grid()
             .DataContext(ViewModel, (view, vm) => view
                 .ColumnSpacing(8)
+                // 4 columns:
+                // [0] Crash Id + copy
+                // [1] checkbox
+                // [2] Cancel
+                // [3] Submit
                 .ColumnDefinitions("Auto,*,Auto,Auto")
                 .Children(
 
-                    // Column 0: Crash Id / status
+                    // Column 0: Crash Id + copy icon (built in BuildStatusLabel)
                     new ContentControl()
                         .Grid(0)
+                        .VerticalAlignment(VerticalAlignment.Center)
                         .Content(x => x.Binding(() => vm.Status)
                             .Convert(status => BuildStatusLabel(vm, status).Name("statusLabel"))),
 
-                    // Column 1: checkbox, centered in the middle area
+                    // Column 1: checkbox in the middle
                     new CheckBox()
                         .Grid(1)
                         .Content("I need help, create a support ticket.")
@@ -50,26 +56,29 @@ public sealed class FooterView : ReactiveUserControl<FooterViewModel>
                         .Grid(2)
                         .Content("Cancel")
                         .Name("cancelButton")
+                        .VerticalAlignment(VerticalAlignment.Center)
                         .Command(x => x.Binding(() => vm.CancelCommand))
                         .Background(Colors.Transparent),
 
-                // Column 3: Submit button
-                new Button()
-                    .Grid(3)
-                    .Content("Submit")
-                    .Name("submitButton")
-                    .AutomationProperties(automationId: "submitButton")
-                    .Command(x => x.Binding(() => vm.SubmitCommand))
-                    .Style(StaticResource.Get<Style>("AccentButtonStyle"))
-                    .CornerRadius(ThemeResource.Get<CornerRadius>("ControlCornerRadius"))))
-            );
+                    // Column 3: Submit button
+                    new Button()
+                        .Grid(3)
+                        .Content("Submit")
+                        .Name("submitButton")
+                        .AutomationProperties(automationId: "submitButton")
+                        .VerticalAlignment(VerticalAlignment.Center)
+                        .Command(x => x.Binding(() => vm.SubmitCommand))
+                        .Style(StaticResource.Get<Style>("AccentButtonStyle"))
+                        .CornerRadius(ThemeResource.Get<CornerRadius>("ControlCornerRadius")))));
     }
+
 
     FrameworkElement BuildStatusLabel(FooterViewModel vm, FooterStatus status)
     {
         return status switch
         {
             FooterStatus.Normal => new IconLabel(FA.Copy)
+            { IconOnRight = true }
                 .ToolTip("Event ID")
                 .Text(x => x.Binding(() => vm.EventId)
                     .Convert(id => string.IsNullOrWhiteSpace(id)

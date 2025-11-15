@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using Sentry.CrashReporter.Services;
 
 namespace Sentry.CrashReporter.ViewModels;
@@ -64,7 +65,7 @@ public partial class FooterViewModel : ReactiveObject
         ErrorMessage = null;
         try
         {
-            await _reporter.SubmitAsync(_envelope!);
+            //await _reporter.SubmitAsync(_envelope!);
 
             // NEW: optionally create a Zendesk ticket
             if (CreateZendeskTicket)
@@ -82,57 +83,49 @@ public partial class FooterViewModel : ReactiveObject
 
     private async Task LaunchZendeskTicketAsync()
     {
-        var feedback = _reporter.Feedback;
+        const string BaseUrl = "https://support.alderongames.com/hc/en-us/requests/new";
+        const string TicketFormId = "900001271243";
 
-        // Subject line for Zendesk ticket
+        // Field IDs from your form
+        const string PlatformFieldId = "900008407706";
+        const string UsernameFieldId = "900008408186";
+        const string AlderonIdFieldId = "900008407386";
+
+        static string Enc(string? v) => Uri.EscapeDataString(v ?? "");
+
+        var fb = _reporter.Feedback;
+
+        // Map OS → Zendesk accepted values
+        string platformValue =
+            OperatingSystem.IsWindows() ? "pot_os_windows" :
+            OperatingSystem.IsMacOS() ? "pot_os_macos" :    // confirm exact value
+            OperatingSystem.IsLinux() ? "pot_os_linux" :    // confirm exact value
+                                          "pot_os_windows";    // fallback
+
+        // Subject line
         var subject = $"Crash report {ShortEventId ?? EventId}";
 
-        // Build description from feedback + crash info
-        var descriptionBuilder = new System.Text.StringBuilder();
+        // Description includes crash metadata + user message
+        var description =
+            $"{fb?.Message}\n\n" +
+            $"Event ID: {EventId}\n" +
+            $"DSN: {Dsn}\n" +
+            $"Platform: {platformValue}\n" +
+            $"Username: {fb?.Name}\n" +
+            $"Email: {fb?.Email}";
 
-        if (!string.IsNullOrWhiteSpace(feedback?.Message))
-        {
-            descriptionBuilder.AppendLine(feedback.Message);
-            descriptionBuilder.AppendLine();
-        }
+        // Build the final Zendesk URL
+        var url =
+            $"{BaseUrl}?" +
+            $"ticket_form_id={TicketFormId}" +
+            $"&tf_anonymous_requester_email={Enc(fb?.Email)}" +
+            $"&tf_subject={Enc(subject)}" +
+            $"&tf_description={Enc(description)}" +
+            $"&tf_{PlatformFieldId}={Enc(platformValue)}" +
+            $"&tf_{UsernameFieldId}={Enc(fb?.Name)}" +
+            $"&tf_{AlderonIdFieldId}="; // fill if you have it
 
-        descriptionBuilder.AppendLine($"Event ID: {EventId}");
-
-        if (!string.IsNullOrWhiteSpace(Dsn))
-            descriptionBuilder.AppendLine($"DSN: {Dsn}");
-
-        if (!string.IsNullOrWhiteSpace(feedback?.Name))
-            descriptionBuilder.AppendLine($"Username: {feedback.Name}");
-
-        if (!string.IsNullOrWhiteSpace(feedback?.Email))
-            descriptionBuilder.AppendLine($"Email: {feedback.Email}");
-
-        // === Zendesk URL setup ===
-        // Change these to match your Zendesk instance / form:
-        const string baseUrl = "https://support.alderongames.com/hc/en-us/requests/new";
-        const string ticketFormId = "900001271243"; // your Zendesk ticket form id
-
-        static string Encode(string? value) =>
-            string.IsNullOrWhiteSpace(value)
-                ? string.Empty
-                : System.Uri.EscapeDataString(value);
-
-        var description = descriptionBuilder.ToString();
-
-        var query = $"?ticket_form_id={ticketFormId}" +
-                    $"&tf_subject={Encode(subject)}" +
-                    $"&tf_description={Encode(description)}";
-
-        // Prefill requester email if present
-        if (!string.IsNullOrWhiteSpace(feedback?.Email))
-        {
-            query += $"&tf_requester_email={Encode(feedback!.Email)}";
-        }
-
-        var uri = new System.Uri(baseUrl + query);
-
-        // Opens default browser to the Zendesk form
-        await Launcher.LaunchUriAsync(uri);
+        await Windows.System.Launcher.LaunchUriAsync(new Uri(url));
     }
 
 
