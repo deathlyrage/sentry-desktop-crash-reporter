@@ -51,14 +51,14 @@ public sealed class FeedbackView : ReactiveUserControl<FeedbackViewModel>
                             .VerticalAlignment(VerticalAlignment.Stretch),
                         new TextBox()
                             .Grid(row: 1)
-                            .Header("Name")
-                            .PlaceholderText("Your name (optional)")
+                            .Header("Username")
+                            .PlaceholderText("Username (optional)")
                             .AutomationProperties(automationId: "nameTextBox")
                             .IsEnabled(x => x.Binding(() => vm.IsEnabled))
                             .Text(x => x.Binding(() => vm.Name).TwoWay().UpdateSourceTrigger(UpdateSourceTrigger.PropertyChanged)),
                         new TextBox()
                             .Grid(row: 2)
-                            .Header("Email")
+                            .Header("Contact Email")
                             .PlaceholderText("Contact email (optional)")
                             .AutomationProperties(automationId: "emailTextBox")
                             .IsEnabled(x => x.Binding(() => vm.IsEnabled))
