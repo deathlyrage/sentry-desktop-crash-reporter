@@ -55,7 +55,7 @@ public sealed class FooterView : ReactiveUserControl<FooterViewModel>
         {
             FooterStatus.Normal => new IconLabel(FA.Copy)
                 .ToolTip("Event ID")
-                .Text(x => x.Binding(() => vm.ShortEventId)),
+                .Text(x => x.Binding(() => vm.EventId)),
             FooterStatus.Busy => new IconLabel()
                 .Icon(new ProgressRing()
                     .IsActive(true)
