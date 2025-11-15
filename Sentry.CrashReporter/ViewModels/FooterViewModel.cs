@@ -100,47 +100,35 @@ public partial class FooterViewModel : ReactiveObject
         const string BaseUrl = "https://support.alderongames.com/hc/en-us/requests/new";
         const string TicketFormId = "900001271243";
 
-        // Field IDs from your form
         const string PlatformFieldId = "900008407706";
         const string UsernameFieldId = "900008408186";
         const string AlderonIdFieldId = "900008407386";
 
-        //static string Enc(string? v) => Uri.EscapeDataString(v ?? "");
         static string Enc(string? value) =>
-string.IsNullOrWhiteSpace(value) ? string.Empty : Uri.EscapeDataString(value);
-
+            string.IsNullOrWhiteSpace(value) ? string.Empty : Uri.EscapeDataString(value);
 
         var fb = _reporter.Feedback;
 
-        // Map OS → Zendesk accepted values
         string platformValue =
             OperatingSystem.IsWindows() ? "pot_os_windows" :
-            OperatingSystem.IsMacOS() ? "pot_os_macos" :    // confirm exact value
-            OperatingSystem.IsLinux() ? "pot_os_linux" :    // confirm exact value
-                                          "pot_os_windows";    // fallback
+            OperatingSystem.IsMacOS() ? "pot_os_macos" :
+            OperatingSystem.IsLinux() ? "pot_os_linux" :
+            "pot_os_windows";
 
-        // Subject line
         var subject = $"Help with Crash {EventId}";
 
-        // 1) Normalize user message newlines to \n
-        var userMessage = NormalizeNewLines(fb?.Message);
-
-        // 2) Build description using only \n
+        // Use <br> for line breaks (HTML), NOT \n
         var description =
-            $"{userMessage}\n\n" +
-            $"Event ID: {EventId}\n" +
-            $"DSN: {Dsn}\n";
+            $"{fb?.Message}<br><br>" +
+            $"Event ID: {EventId}<br>" +
+            $"DSN: {Dsn}<br>";
 
-        // 3) Encode AFTER normalization (will now produce only %0A)
-        var encodedDescription = Enc(description);
-
-        // Build the final Zendesk URL
         var url =
             $"{BaseUrl}?" +
             $"ticket_form_id={TicketFormId}" +
             $"&tf_anonymous_requester_email={Enc(fb?.Email)}" +
             $"&tf_subject={Enc(subject)}" +
-            $"&tf_description={encodedDescription}  " +
+            $"&tf_description={Enc(description)}" +
             $"&tf_{PlatformFieldId}={Enc(platformValue)}" +
             $"&tf_{UsernameFieldId}={Enc(fb?.Name)}" +
             $"&tf_{AlderonIdFieldId}={Enc(fb?.UserId)}";
