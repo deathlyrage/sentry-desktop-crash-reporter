@@ -1,4 +1,7 @@
 using System.Buffers.Text;
+using System.Diagnostics.Metrics;
+using System.Text;
+using System.Xml.Linq;
 using Sentry.CrashReporter.Services;
 
 namespace Sentry.CrashReporter.ViewModels;
@@ -80,10 +83,16 @@ public partial class FooterViewModel : ReactiveObject
             ErrorMessage = e.Message;
         }
     }
-    string NormalizeNewlines(string s)
+
+    static string NormalizeNewLines(string? value)
     {
-        // Convert all newline types to CRLF, which Zendesk accepts
-        return s.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+        // Convert all CRLF and lone CR to simple LF
+        return value
+            .Replace("\r\n", "\n")
+            .Replace("\r", "\n");
     }
 
     private async Task LaunchZendeskTicketAsync()
@@ -96,7 +105,10 @@ public partial class FooterViewModel : ReactiveObject
         const string UsernameFieldId = "900008408186";
         const string AlderonIdFieldId = "900008407386";
 
-        static string Enc(string? v) => Uri.EscapeDataString(v ?? "");
+        //static string Enc(string? v) => Uri.EscapeDataString(v ?? "");
+        static string Enc(string? value) =>
+string.IsNullOrWhiteSpace(value) ? string.Empty : Uri.EscapeDataString(value);
+
 
         var fb = _reporter.Feedback;
 
@@ -110,12 +122,17 @@ public partial class FooterViewModel : ReactiveObject
         // Subject line
         var subject = $"Help with Crash {EventId}";
 
-        // Description includes crash metadata + user message
-        var description =
-            $"{fb?.Message}\n\n" +
-            $"Crash ID: {EventId}\n";
+        // 1) Normalize user message newlines to \n
+        var userMessage = NormalizeNewLines(fb?.Message);
 
-        description = NormalizeNewlines(description);
+        // 2) Build description using only \n
+        var description =
+            $"{userMessage}\n\n" +
+            $"Event ID: {EventId}\n" +
+            $"DSN: {Dsn}\n";
+
+        // 3) Encode AFTER normalization (will now produce only %0A)
+        var encodedDescription = Enc(description);
 
         // Build the final Zendesk URL
         var url =
@@ -123,7 +140,7 @@ public partial class FooterViewModel : ReactiveObject
             $"ticket_form_id={TicketFormId}" +
             $"&tf_anonymous_requester_email={Enc(fb?.Email)}" +
             $"&tf_subject={Enc(subject)}" +
-            $"&tf_description={Enc(description)}" +
+            $"&tf_description={encodedDescription}  " +
             $"&tf_{PlatformFieldId}={Enc(platformValue)}" +
             $"&tf_{UsernameFieldId}={Enc(fb?.Name)}" +
             $"&tf_{AlderonIdFieldId}={Enc(fb?.UserId)}";
