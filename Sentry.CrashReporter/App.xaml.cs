@@ -106,7 +106,7 @@ public partial class App : Application
             );
         MainWindow = builder.Window;
 
-        MainWindow.Title = "Sentry Crash Reporter";
+        MainWindow.Title = "Alderon Games Crash Reporter";
         MainWindow.Resize(900, 600);
         MainWindow.SetPreferredMinSize(600, 400);
         MainWindow.UseSystemTheme();
