@@ -4,7 +4,7 @@
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
-            <ImageSource x:Key="SentryGlyphIcon">ms-appx:///Assets/Alderon.png</ImageSource>
+            <ImageSource x:Key="SentryGlyphIcon">ms-appx:///Assets/BlackAGLogoGlow128.webp</ImageSource>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

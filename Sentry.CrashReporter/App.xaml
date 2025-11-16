@@ -10,12 +10,6 @@
                 <ResourceDictionary Source="ms-appx:///Styles/Images.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#262626" />
-
-            <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#262626" />
-            <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#2A2A2A" />
-            <SolidColorBrush x:Key="TextControlBackground" Color="#1F1F1F" />
-
             <!-- Text selection highlight -->
             <Color x:Key="TextControlSelectionHighlightColor">#E0552A</Color>
             <SolidColorBrush x:Key="TextSelectionHighlightColorThemeBrush"

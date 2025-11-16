@@ -101,7 +101,8 @@ public sealed class MainPage : Page
     {
         this.DataContext<MainViewModel>((view, vm) => view
             .NavigationCacheMode(NavigationCacheMode.Required)
-            .Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush"))
+            //.Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush"))
+            .Background(new SolidColorBrush(Color.FromArgb(0xFF, 0x26, 0x26, 0x26)))
             .Content(new Grid()
                 .Children(new Control()
                         .IsHitTestVisible(false)
