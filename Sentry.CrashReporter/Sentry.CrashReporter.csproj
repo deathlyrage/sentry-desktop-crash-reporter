@@ -70,7 +70,7 @@
 
 
     <ItemGroup>
-        <Content Include="Assets\Alderon.png" />
+        <Content Include="Assets\BlackAGLogoGlow128.webp" />
         <Content Include="Assets\Fonts\SourceCodePro\SourceCodePro-Regular.ttf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
