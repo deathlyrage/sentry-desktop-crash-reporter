@@ -25,8 +25,9 @@ public sealed class EnvelopeView : ReactivePage<EnvelopeViewModel>
                 .DisposeWith(d);
         });
 
-        this.
-            Background(new SolidColorBrush(Color.FromArgb(0xFF, 0x26, 0x26, 0x26)))
+        this
+            //.Background(ThemeResource.Get<Brush>("ApplicationPageBackgroundThemeBrush"))
+            .Background(new SolidColorBrush(Color.FromArgb(0xFF, 0x0E, 0x10, 0x13)))
             .Content(new Grid()
                 .DataContext(ViewModel, (view, vm) => view
                 .Children(
