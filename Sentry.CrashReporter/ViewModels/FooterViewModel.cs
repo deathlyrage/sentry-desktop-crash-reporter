@@ -126,8 +126,7 @@ public partial class FooterViewModel : ReactiveObject
 
         var description =
             $"{userMessageHtml}<br><br>" +
-            $"Event ID: {EventId}<br>" +
-            $"DSN: {Dsn}<br>";
+            $"Event ID: {EventId}<br>";
 
         var url =
             $"{BaseUrl}?" +
