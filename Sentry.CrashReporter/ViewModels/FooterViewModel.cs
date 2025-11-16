@@ -68,7 +68,7 @@ public partial class FooterViewModel : ReactiveObject
         ErrorMessage = null;
         try
         {
-            //await _reporter.SubmitAsync(_envelope!);
+            await _reporter.SubmitAsync(_envelope!);
 
             // NEW: optionally create a Zendesk ticket
             if (CreateZendeskTicket)
