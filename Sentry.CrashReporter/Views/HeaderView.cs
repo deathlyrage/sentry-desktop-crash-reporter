@@ -38,8 +38,8 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                     new Image()
                         .Grid(0)
                         .Source(ThemeResource.Get<ImageSource>("SentryGlyphIcon"))
-                        .Width(68)
-                        .Height(60)
+                        .Width(128)
+                        .Height(128)
                         .HorizontalAlignment(HorizontalAlignment.Left)
                         .VerticalAlignment(VerticalAlignment.Top)
                         .Margin(0, 0, 16, 0),

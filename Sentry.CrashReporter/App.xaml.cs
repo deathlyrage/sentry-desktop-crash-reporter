@@ -16,6 +16,7 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+        RequestedTheme = ApplicationTheme.Dark;
     }
 
     public static IServiceProvider ConfigureServices(StorageFile? file)

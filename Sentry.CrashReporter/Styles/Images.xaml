@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Dark">
+        <ResourceDictionary x:Key="Default">
             <ImageSource x:Key="SentryGlyphIcon">ms-appx:///Assets/Alderon.png</ImageSource>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

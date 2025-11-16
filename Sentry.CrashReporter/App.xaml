@@ -10,10 +10,58 @@
                 <ResourceDictionary Source="ms-appx:///Styles/Images.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Color x:Key="SystemAccentColor">#C37D65</Color>
-            <Color x:Key="SystemAccentColorDark1">#A86852</Color>
-            <Color x:Key="SystemAccentColorDark2">#8C5644</Color>
-            <Color x:Key="SystemAccentColorDark3">#8C5644</Color>
+            <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#262626" />
+
+            <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#262626" />
+            <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#2A2A2A" />
+            <SolidColorBrush x:Key="TextControlBackground" Color="#1F1F1F" />
+
+            <!-- Text selection highlight -->
+            <Color x:Key="TextControlSelectionHighlightColor">#E0552A</Color>
+            <SolidColorBrush x:Key="TextSelectionHighlightColorThemeBrush"
+                 Color="#E0552A" />
+
+            <!-- Text caret (cursor) -->
+            <SolidColorBrush x:Key="TextControlCaretForegroundBrush"
+                 Color="#E0552A" />
+
+            <!-- TextBox border colors -->
+            <SolidColorBrush x:Key="TextControlBorderBrush"
+                 Color="#E0552A" />
+            <SolidColorBrush x:Key="TextControlBorderBrushPointerOver"
+                 Color="#E0552A" />
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused"
+                 Color="#E0552A" />
+            <SolidColorBrush x:Key="TextControlBorderBrushDragging"
+                 Color="#E0552A" />
+
+
+            <!-- Chat Icon -->
+            <SolidColorBrush x:Key="AccentFillColorDefaultBrush"
+                 Color="#E0552A" />
+            <SolidColorBrush x:Key="AccentFillColorSecondaryBrush"
+                 Color="#E0552A" />
+            <SolidColorBrush x:Key="AccentFillColorTertiaryBrush"
+                 Color="#E0552A" />
+
+
+            <!-- Accent system colors -->
+            <Color x:Key="SystemAccentColor">#E0552A</Color>
+            <Color x:Key="SystemAccentColorDark1">#C04824</Color>
+            <Color x:Key="SystemAccentColorDark2">#A33A1E</Color>
+            <Color x:Key="SystemAccentColorDark3">#862D18</Color>
+
+<SolidColorBrush x:Key="SystemControlFocusVisualPrimaryBrush"
+                 Color="#E0552A" />
+<SolidColorBrush x:Key="SystemControlFocusVisualSecondaryBrush"
+                 Color="#E0552A" />
+
+
+            <!-- Accent buttons -->
+            <SolidColorBrush x:Key="AccentButtonBackground"            Color="#E0552A" />
+            <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#C04824" />
+            <SolidColorBrush x:Key="AccentButtonBackgroundPressed"     Color="#A33A1E" />
+            <SolidColorBrush x:Key="AccentButtonBackgroundDisabled"    Color="#862D18" Opacity="0.4" />
 
             <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="AccentButtonForeground" Color="#FFFFFF" />
