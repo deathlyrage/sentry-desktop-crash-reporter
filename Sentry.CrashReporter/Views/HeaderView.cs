@@ -30,10 +30,23 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
 
         this.Content(new Grid()
             .DataContext(ViewModel, (view, vm) => view
-                .ColumnDefinitions("*,Auto")
+                // Column 0 = logo, Column 1 = text
+                .ColumnDefinitions("Auto,*")
                 .Children(
-                    new StackPanel()
+
+                    // LOGO — using the theme resource image source
+                    new Image()
                         .Grid(0)
+                        .Source(ThemeResource.Get<ImageSource>("SentryGlyphIcon"))
+                        .Width(68)
+                        .Height(60)
+                        .HorizontalAlignment(HorizontalAlignment.Left)
+                        .VerticalAlignment(VerticalAlignment.Top)
+                        .Margin(0, 0, 16, 0),
+
+                    // TEXT AREA — now in Column 1
+                    new StackPanel()
+                        .Grid(1)
                         .Orientation(Orientation.Vertical)
                         .Spacing(8)
                         .Children(
@@ -41,34 +54,25 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                                 .Text("Report a Crash")
                                 .Style(ThemeResource.Get<Style>("TitleTextBlockStyle")),
 
-                            // NEW: help text
                             new TextBlock()
                                 .Text("We’re constantly fixing crashes to keep the game running smoothly.")
                                 .TextWrapping(TextWrapping.Wrap),
 
                             new TextBlock()
-                                .Text("If this one is urgent, please open a support ticket after sending in this crash.")
+                                .Text("If this one is urgent, please check the open a support ticket to get help after sending in the crash.")
                                 .TextWrapping(TextWrapping.Wrap),
 
-                            // Support website button
-                            new HyperlinkButton
-                            {
-                                Content = "Open Support Site",
-                                NavigateUri = new Uri("https://support.alderongames.com/hc/en-us/requests/new?ticket_form_id=900001271243")
-                            }
-                            .Margin(0, 0, 0, 4),
-
-                           new TextBlock()
-                                .Text("If not, a bug report really helps us out.")
-                                .TextWrapping(TextWrapping.Wrap),
-
-                            // Bug tracker button
-                            new HyperlinkButton
-                            {
-                                Content = "Open Bug Tracker",
-                                NavigateUri = new Uri("https://bugtracker.alderongames.com/bug/create")
-                            }
-                            .Margin(0, 0, 0, 8),
+                            new TextBlock()
+                                .TextWrapping(TextWrapping.Wrap)
+                                .Inlines(
+                                    new Run { Text = "If not, a bug report really helps us out. " },
+                                    new Hyperlink
+                                    {
+                                        NavigateUri = new Uri("https://bugtracker.alderongames.com/bug/create"),
+                                        Inlines = { new Run { Text = "Open Bug Tracker" } }
+                                    }
+                                )
+                                .Margin(0, 0, 0, 8),
 
                             new WrapPanel()
                                 .Margin(-4, 0)
@@ -81,12 +85,14 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                                         .Text(x => x.Binding(() => vm.Exception).Convert(e => e?.Type ?? string.Empty))
                                         .Visibility(x => x.Binding(() => vm.Exception)
                                             .Convert(e => string.IsNullOrEmpty(e?.Type) ? Visibility.Collapsed : Visibility.Visible)),
+
                                     new IconLabel(FA.Globe)
                                         .Margin(8, 4)
                                         .Name("releaseLabel")
                                         .ToolTip("Release")
                                         .Text(x => x.Binding(() => vm.Release))
                                         .Visibility(x => x.Binding(() => vm.Release).Converter(ToVisibility)),
+
                                     new IconLabel()
                                         .Margin(8, 4)
                                         .Name("osLabel")
@@ -94,17 +100,18 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                                         .ToolTip("Operating System")
                                         .Text(x => x.Binding(() => vm.OsPretty))
                                         .Visibility(x => x.Binding(() => vm.OsPretty).Converter(ToVisibility)),
+
                                     new IconLabel(FA.Wrench)
                                         .Margin(8, 4)
                                         .Name("environmentLabel")
                                         .ToolTip("Environment")
                                         .Text(x => x.Binding(() => vm.Environment))
-                                        .Visibility(x => x.Binding(() => vm.Environment).Converter(ToVisibility)))),
-                    new Image()
-                        .Grid(1)
-                        .Source(ThemeResource.Get<ImageSource>("SentryGlyphIcon"))
-                        .Width(68)
-                        .Height(60))));
+                                        .Visibility(x => x.Binding(() => vm.Environment).Converter(ToVisibility))
+                                )
+                        )
+                )
+            )
+        );
     }
 
     private static string ToBrand(string? value)

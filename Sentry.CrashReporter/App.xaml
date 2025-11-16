@@ -1,4 +1,4 @@
-<Application x:Class="Sentry.CrashReporter.App"
+﻿<Application x:Class="Sentry.CrashReporter.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -10,13 +10,10 @@
                 <ResourceDictionary Source="ms-appx:///Styles/Images.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Color x:Key="SystemAccentColor">#8866FF</Color>
-            <Color x:Key="SystemAccentColorLight1">#9C7FFF</Color>
-            <Color x:Key="SystemAccentColorLight2">#7554FF</Color>
-            <Color x:Key="SystemAccentColorLight3">#B08CFF</Color>
-            <Color x:Key="SystemAccentColorDark1">#7554FF</Color>
-            <Color x:Key="SystemAccentColorDark2">#5A3FCC</Color>
-            <Color x:Key="SystemAccentColorDark3">#3F2B99</Color>
+            <Color x:Key="SystemAccentColor">#C37D65</Color>
+            <Color x:Key="SystemAccentColorDark1">#A86852</Color>
+            <Color x:Key="SystemAccentColorDark2">#8C5644</Color>
+            <Color x:Key="SystemAccentColorDark3">#8C5644</Color>
 
             <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="AccentButtonForeground" Color="#FFFFFF" />
